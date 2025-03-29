@@ -16,20 +16,35 @@
     "test": "lab -I 'hexo,makeString'"
   },
   "dependencies": {
-    "request": ">=2.67.0",
-    "wrench": ">=1.5.8",
-    "colors": "*",
-    "JSONSelect": ">= 0.4.0",
-    "jsonfile": ">=2.2.3",
-    "cli-table": ">=0.3.1",
-    "prettyjson": "*",
+    "@hapi/boom": "10.0.1",
+    "@hapi/code": "9.0.3",
+    "@hapi/eslint-config-hapi": "13.0.2",
+    "@hapi/eslint-plugin-hapi": "4.3.6",
+    "@hapi/joi": "17.1.1",
+    "@hapi/lab": "26.0.0",
+    "@hapi/rule-capitalize-modules": "1.2.1",
+    "@hapi/rule-for-loop": "1.2.1",
+    "@hapi/rule-no-var": "1.1.4",
+    "@hapi/rule-scope-start": "2.2.0",
+    "@hapi/topo": "6.0.2",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "async": "3.2.6",
+    "axios": "^1.8.4",
     "cheerio": "*",
-    "moment": "~2.10.6",
-    "puid": "~1.0.5",
-    "update-notifier": "~0.6.0",
-    "async": "~1.5.0",
-    "underscore.string": "~3.2.2",
-    "lockfile": "~1.0.1"
+    "cli-table": "0.3.11",
+    "colors": "*",
+    "fs-extra": "^11.3.0",
+    "jsonfile": "6.1.0",
+    "JSONSelect": "0.4.0",
+    "lockfile": "~.0.4",
+    "lru-cache": "^11.1.0",
+    "moment": "2.30.1",
+    "prettyjson": "*",
+    "puid": "1.0.7",
+    "rimraf": "^6.0.1",
+    "underscore.string": "3.3.6",
+    "update-notifier": "7.3.1",
+    "uuid": "^11.1.0"
   },
   "keywords": [
     "website",
@@ -56,8 +71,8 @@
     "url": "https://github.com/sergiolepore/hexo-broken-link-checker/issues"
   },
   "devDependencies": {
-    "code": "^1.5.0",
-    "hexo": "^3.1.1",
-    "lab": "^6.2.0"
+    "eslint": "^9.23.0",
+    "hexo": "7.3.0",
+    "lab": "^18.0.2"
   }
 }

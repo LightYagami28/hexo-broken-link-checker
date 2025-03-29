@@ -1,163 +1,122 @@
 # Hexo Broken Link Checker
 
-[![npm version][npm-badge]][npm-url]
-[![Build Status][travis-badge]][travis-url]
-[![Coverage Status][coveralls-badge]][coveralls-url]
-[![Dependency Status][david-badge]][david-url]
+[![npm version](https://img.shields.io/npm/v/hexo-broken-link-checker.svg)](https://www.npmjs.com/package/hexo-broken-link-checker)
+[![Build Status](https://img.shields.io/travis/sergiolepore/hexo-broken-link-checker.svg)](https://travis-ci.org/sergiolepore/hexo-broken-link-checker)
+[![Coverage Status](https://img.shields.io/coveralls/sergiolepore/hexo-broken-link-checker.svg)](https://coveralls.io/github/sergiolepore/hexo-broken-link-checker?branch=master)
+[![Dependency Status](https://img.shields.io/david/sergiolepore/hexo-broken-link-checker.svg)](https://david-dm.org/sergiolepore/hexo-broken-link-checker)
 
-This is a [hexo](https://github.com/hexojs/hexo) plugin which detects links that don't work, missing images and redirects.
+Hexo Broken Link Checker is a [Hexo](https://github.com/hexojs/hexo) plugin that detects broken links, missing images, and redirects.
 
-## Plugin installation
+## Plugin Installation
 
-Run the following command in the root directory of hexo:
+Run the following command in the root directory of Hexo:
 
-```
+```sh
 npm install hexo-broken-link-checker --save
 ```
 
-And enable the plugin in your `_config.yml`.
+Enable the plugin in `_config.yml`:
 
-```
+```yaml
 plugins:
   - hexo-broken-link-checker
-  ```
+```
 
-This is not necessary anymore for hexo 3.
+_Not necessary for Hexo 3._
 
 ## Configuration
 
-Open your `_config.yml` file and paste the following lines:
+Open `_config.yml` and add the following lines:
 
-```
-# hexo-broken-link-checker plugin
+```yaml
+# Hexo Broken Link Checker configuration
 link_checker:
   enabled: true
   storage_dir: temp/link_checker
   silent_logs: false
 ```
 
-* `enabled: (boolean)` - Enables or disables the post inspection for links.
-* `storage_dir: (string)` - Where do you want the plugin to store its files.
-* `silent_logs: (boolean)` - If `true`, the logs will be placed in a log file instead of the console output.
+### Options:
+- `enabled: (boolean)` - Enables or disables link inspection.
+- `storage_dir: (string)` - Directory where plugin stores its files.
+- `silent_logs: (boolean)` - If `true`, logs are saved to a file instead of console output.
 
-## First run
+## First Run
 
-Once you have all configured, you need to create a few files that will be used by this plugin. Run the following command:
+After configuration, create the necessary files with:
 
-```
+```sh
 hexo link_checker setup
 ```
 
-You'll see something link this:
+You'll see output like this:
 
-    (i) Creating working directory: /Users/abecchis/git/not-a-method/temp/link_checker/
-    (i) Generating storage file: data.json
-    (i) Applying write permissions to storage file.
-    (i) Generating log file: /Users/abecchis/git/not-a-method/temp/link_checker/log.json
-    (i) Done.
+```
+(i) Creating working directory: /Users/username/blog/temp/link_checker/
+(i) Generating storage file: data.json
+(i) Applying write permissions to storage file.
+(i) Generating log file: /Users/username/blog/temp/link_checker/log.json
+(i) Done.
+```
 
+If run multiple times, a warning message will appear.
 
-If, for some reason, you execute this command twice, you'll see a warning message:
-
-
-    (i) Creating working directory: /Users/abecchis/git/not-a-method/temp/link_checker/
-    (!) The directory already exists.
-    (i) Generating storage file: data.json
-    (!) The storage file /Users/abecchis/git/not-a-method/temp/link_checker/data.json
-       already exists and will not be overwritten.
-       If you are COMPLETELY SURE, delete and recreate the files by running hexo link_checker reset.
-    (i) Applying write permissions to storage file.
-    (i) Generating log file: /Users/abecchis/git/not-a-method/temp/link_checker/log.json
-    (i) Done
-
-__Pro Tip!__
-
-`link_checker` command has an alias, `lc`. That said, `hexo link_checker [arguments]` and `hexo lc [arguments]` are the same command.
-
+**Pro Tip:** `link_checker` has an alias `lc`, so `hexo link_checker [args]` and `hexo lc [args]` are the same.
 
 ## Usage
 
-#### Extracting links
+### Extracting Links
 
-First of all, make sure the plugin is enabled:
+Ensure the plugin is enabled:
 
-```
+```yaml
 # _config.yml
 link_checker:
   enabled: true
 ```
 
-This will automatically register a _hexo post filter_, which is a function that processes your already rendered posts. The post filter will be called every time you run `hexo generate`, will extract and store all the links on your posts.
-Currently, `hexo-broken-link-checker` detects:
+The plugin will automatically analyze posts every time you run:
 
-* `<a>` tags.
-* `<img>` tags.
-* `YouTube embedded` videos.
-
-So, as I said, run:
-
-```
+```sh
 hexo generate
 ```
 
-And you'll see the following messages:
+Currently, `hexo-broken-link-checker` detects:
+- `<a>` tags (hyperlinks)
+- `<img>` tags (images)
+- YouTube embedded videos
 
-![](http://i2.minus.com/iWPU1gRWyDEQz.png)
+### Scanning Links
 
+After generating the site, run:
 
-#### Scanning links
-
-If you have a blog with 1000 posts, and each article has 2 external links, you'll have 2000 links to extract and check. That's a lot of operations just to check for success or error HTTP Codes, and that's why the extraction and scan are two different tasks.
-
-Once `hexo generate` has finished the extraction process, you can run:
-
-```
+```sh
 hexo lc scan
 ```
 
-This command will take every link on the storage file and will make a HTTP request to it. All results will be stored on the same storage file.
+This command checks all stored links by making HTTP requests and saves the results.
 
-![](http://i7.minus.com/ieskVuDVrSoXJ.png)
+#### Example cron job for automatic scans
 
-
-__Pro Tip!__
-
-Because this command is slow and passive, you can use a cron job to check all of your links in background. For example:
-
-```
-# Every day at 10PM, go to my blog directory, run the scanner and only store the errors on linkchecker_error.log
-0 22 * * * cd /home/me/MyBlog/ && hexo lc scan 2> linkchecker_errors.log
+```sh
+# Every day at 10 PM, scan and save errors to linkchecker_errors.log
+0 22 * * * cd /home/user/MyBlog/ && hexo lc scan 2> linkchecker_errors.log
 ```
 
-#### Checking the scan results
+### Checking Scan Results
 
-```
+```sh
 hexo lc show-links [options]
 ```
 
-Options can be:
+Options:
+- `--filter=[all|broken|ok|redirects|unverified]` → Filter links by status.
+- `--id=[linkID]` → Show detailed link info.
 
-* `--filter=[all|broken|ok|redirects|unverified]`: filter links by status.
-* `--id=[linkID]`: shows detailed info of a link.
+### Checking Log Files
 
-Examples:
-*Pictures to be redone*
-
-#### Checking the log files
-
-```
+```sh
 hexo lc show-logs
 ```
 
-The screenshot below shows the log file when you set `silent_logs: true` into `_config.yml`:
-
-*screenshot to be redone*
-
-[npm-badge]: https://badge.fury.io/js/hexo-broken-link-checker.svg
-[npm-url]: https://badge.fury.io/js/hexo-broken-link-checker
-[travis-badge]: https://api.travis-ci.org/sergiolepore/hexo-broken-link-checker.svg
-[travis-url]: https://travis-ci.org/sergiolepore/hexo-broken-link-checker
-[coveralls-badge]:https://coveralls.io/repos/sergiolepore/hexo-broken-link-checker/badge.svg?branch=master&service=github
-[coveralls-url]: https://coveralls.io/github/sergiolepore/hexo-broken-link-checker?branch=master
-[david-badge]: https://david-dm.org/sergiolepore/hexo-broken-link-checker.svg
-[david-url]: https://david-dm.org/sergiolepore/hexo-broken-link-checker
+If `silent_logs: true` in `_config.yml`, logs are saved instead of displayed in console.

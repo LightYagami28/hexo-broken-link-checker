@@ -1,7 +1,9 @@
-var commandOptions = require('./lib/commandOptions');
+import commandOptions from './lib/commandOptions';
+import commandHandler from './lib/command';
+import filterHandler from './lib/filter';
 
-// register command handler
-hexo.extend.console.register('link_checker', commandOptions.desc, commandOptions, require('./lib/command'));
+// Registrazione del gestore del comando
+hexo.extend.console.register('link_checker', commandOptions.desc, commandOptions, commandHandler);
 
-// register filter handler
-hexo.extend.filter.register('post', require('./lib/filter'));
+// Registrazione del gestore del filtro
+hexo.extend.filter.register('post', filterHandler);
